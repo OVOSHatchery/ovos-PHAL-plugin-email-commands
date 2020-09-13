@@ -6,6 +6,8 @@ Control Mycroft by email
 
 Allows you to send commands to mycroft by email, inspired by [this blog post](https://medium.com/@thesanjeetc/want-to-control-something-with-siri-heres-how-bae98aceb586)
  
+ ![](./gui.gif)
+ 
  
 # Skill configuration
 

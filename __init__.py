@@ -1,6 +1,7 @@
 from mycroft.skills import MycroftSkill
 from mycroft.messagebus.message import Message
 from mail_monitor import EmailMonitor
+from os.path import dirname, join
 
 
 class EmailMonitorSkill(MycroftSkill):
@@ -39,6 +40,8 @@ class EmailMonitorSkill(MycroftSkill):
             # important if "include_read" is set
             # some uses cases, like using siri Notes, will mark emails as read
             return
+        self.gui.show_animated_image(
+            join(dirname(__file__), "ui", "inbox.gif"), override_idle=2)
         self.settings["processed_emails"].append(email)
         self.log.debug(str(email))
         self.bus.emit(Message("recognizer_loop:utterance",
@@ -48,6 +51,7 @@ class EmailMonitorSkill(MycroftSkill):
 
     def shutdown(self):
         self.mail_client.stop()
+
 
 
 def create_skill():
