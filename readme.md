@@ -24,6 +24,7 @@ Add the following section to your [mycroft.conf](https://mycroft-ai.gitbook.io/d
    "port":993,
    "folder":"inbox", 
    "time_between_checks":30, 
+   "include_read": false,
    "whitelist": ["thisemail@isallowed.com", "email@thatcansend.commands"]
 }
 ```
@@ -37,6 +38,10 @@ for new emails, the "lag" between a command and its execution
 whitelist is a list of emails allowed to send commands to mycroft, if the 
 sender is not in this list then the emails will be ignored
 
+some uses cases, like using siri Notes, will mark emails as read, setting
+"include_read" to true will process those emails, note that this will 
+execute ALL old emails on first run, it is strongly recommended that you 
+only set this flag if using a newly created folder
 
 # Email configuration
 

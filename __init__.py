@@ -7,6 +7,8 @@ class EmailMonitorSkill(MycroftSkill):
     def __init__(self):
         super().__init__()
         self.email_config = self.config_core.get("email", {})
+        if "processed_emails" not in self.settings:
+            self.settings["processed_emails"] = []
 
     def initialize(self):
         if "mail" not in self.email_config or "password" not in \
@@ -15,6 +17,10 @@ class EmailMonitorSkill(MycroftSkill):
             self.speak_dialog("error")
             raise RuntimeError
         else:
+            filter = "(UNSEEN)"
+            if self.email_config.get("include_read"):
+                filter = "(ALL)"
+            self.email_config["filter"] = filter
             try:
                 self.mail_client = EmailMonitor(**self.email_config)
                 self.mail_client.on_new_email = self.handle_new_email
@@ -28,6 +34,12 @@ class EmailMonitorSkill(MycroftSkill):
         self.speak_dialog("intro")
 
     def handle_new_email(self, email):
+        if email in self.settings["processed_emails"]:
+            # don't process same email twice
+            # important if "include_read" is set
+            # some uses cases, like using siri Notes, will mark emails as read
+            return
+        self.settings["processed_emails"].append(email)
         self.log.debug(str(email))
         self.bus.emit(Message("recognizer_loop:utterance",
                               {"utterances": [email['payload']]},
