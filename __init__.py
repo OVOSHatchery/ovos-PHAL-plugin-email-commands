@@ -21,6 +21,8 @@ class EmailMonitorSkill(MycroftSkill):
             filter = "(UNSEEN)"
             if self.email_config.get("include_read"):
                 filter = "(ALL)"
+            if "include_read" in self.email_config:
+                self.email_config.pop("include_read")
             self.email_config["filter"] = filter
             try:
                 self.mail_client = EmailMonitor(**self.email_config)
