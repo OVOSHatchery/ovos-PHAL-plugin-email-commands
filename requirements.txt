@@ -1,1 +1,1 @@
-mail_monitor>=0.4
+mail_monitor>=0.5
